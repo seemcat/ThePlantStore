@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.send(`The Plant Store's SERVER!`))
 let listOfItems;
-let merchantKey;
+let orderId;
 
 // When user clicks CHECKOUT -> Save items to order.
 app.post('/checkout', (req, res) => {
@@ -50,7 +50,7 @@ app.post('/createAnOrder', (req, res) => {
 
   request(options, (error, response, body) => {
     if (error) throw new Error(error);
-    console.log(body);
+    orderId = body.id;
   });
 })
 
@@ -74,7 +74,24 @@ app.get('/merchantKey', (req, res) => {
 
 // When user clicks PLACE ORDER -> Use the token to pay for the order.
 app.post('/payForAnOrder', (req, res) => {
-  console.log('YAY paid it!');
-})
+  const options = {
+    method: 'POST',
+    url: `https://scl-sandbox.dev.clover.com/v1/orders/${orderId}/pay`,
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: `Bearer ${authToken}`,
+    },
+    body: {
+      'source': req.body.token,
+    },
+    json: true,
+  };
+
+  request(options, (error, response, body) => {
+    if (error) throw new Error(error);
+    console.log(body);
+  });
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

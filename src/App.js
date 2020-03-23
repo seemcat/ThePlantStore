@@ -12,13 +12,13 @@ class App extends Component {
         description: 'Monstera',
         quantity: 1,
       },
-      snakePlant: {
+      snake: {
         isSelected: false,
         amount: 2000,
         description: 'Snake Plant',
         quantity: 1,
       },
-      zzPlant: {
+      zz: {
         isSelected: false,
         amount: 1800,
         description: 'ZZ Plant',
@@ -56,6 +56,8 @@ class App extends Component {
 
   render() {
 
+    let txtToDisplay;
+
     return (
       <div className="App">
         <header className="App-header">
@@ -65,29 +67,35 @@ class App extends Component {
         </header>
         <div className="App-list">
           <div className="card App-card">
-            <img className="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap"/>
+            <img className="card-img-top" src="https://s7d1.scene7.com/is/image/terrain/56923295_000_a?$zoom2$" alt="Card image cap"/>
             <div className="card-body">
               <h4 className="card-title"><a>Monstera</a></h4>
               <p className="card-text">$50</p>
-              <a href="#" className="btn btn-primary" onClick={ () => this.togglePlant('monstera') }>+</a>
+              <a href="#" onClick={ () => this.togglePlant('monstera') }>
+                { txtToDisplay = this.state.monstera.isSelected ? 'REMOVE FROM CART' : 'ADD TO CART' }
+              </a>
             </div>
           </div>
 
           <div className="card App-card">
-            <img className="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap"/>
+            <img className="card-img-top" src="https://cdn.shopify.com/s/files/1/0150/6262/products/the-sill_snake-plant-laurentii_variant_small_grant_blush_1200x.jpg?v=1583160736" alt="Card image cap"/>
             <div className="card-body">
-              <h4 className="card-title"><a>Snake Plant</a></h4>
+              <h4 className="card-title"><a>Snake</a></h4>
               <p className="card-text">$20</p>
-              <a href="#" className="btn btn-primary" onClick={ () => this.togglePlant('snakePlant') }>+</a>
+              <a href="#" onClick={ () => this.togglePlant('snake') }>
+                { txtToDisplay = this.state.snake.isSelected ? 'REMOVE FROM CART' : 'ADD TO CART' }
+              </a>
             </div>
           </div>
 
           <div className="card App-card">
-            <img className="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap"/>
+            <img className="card-img-top" src="https://cdn.shopify.com/s/files/1/0150/6262/products/the-sill_zz-plant_variant_medium_grow-pot_none_1080x.jpg?v=1581710909" alt="Card image cap"/>
             <div className="card-body">
-              <h4 className="card-title"><a>ZZ Plant</a></h4>
+              <h4 className="card-title"><a>ZZ</a></h4>
               <p className="card-text">$18</p>
-              <a href="#" className="btn btn-primary" onClick={ () => this.togglePlant('zzPlant') }>+</a>
+              <a href="#" onClick={ () => this.togglePlant('zz') }>
+                { txtToDisplay = this.state.zz.isSelected ? 'REMOVE FROM CART' : 'ADD TO CART' }
+              </a>
             </div>
           </div>
         </div>

@@ -10,7 +10,7 @@ function OrderConfirmation() {
           The Plant Store
         </p>
       </header>
-      <div className="App-list">
+      <div className="App-list Confirmation">
         Thank you for your order!
       </div>
     </div>
