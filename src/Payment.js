@@ -7,6 +7,11 @@ class Payment extends Component {
     super();
     this.state = {
       amount: null,
+      'card-number': null,
+      'card-date': null,
+      'card-cvv': null,
+      'card-postal-code': null,
+      apiAccessKey: null,
     }
   }
 
@@ -15,91 +20,39 @@ class Payment extends Component {
     fetch('http://localhost:3030/merchantKey')
       .then((res) => res.json())
       .then((data) => {
-        // Load the Clover E-Commerce SDK
-        const script = document.createElement('script');
-        script.src = "https://checkout.sandbox.dev.clover.com/sdk.js";
-        script.async = true;
-        script.onload = () => this.scriptLoaded(data.apiAccessKey);
-        document.body.appendChild(script);
+        this.setState({ apiAccessKey: data.apiAccessKey });
       });
   }
 
-  scriptLoaded(apiAccessKey) {
-    // Set payments client.
-    const clover = new window.Clover(apiAccessKey);
-    const elements = clover.elements();
-    const styles = {
-      body: {
-        fontFamily: 'Roboto, Open Sans, sans-serif',
-        fontSize: '16px',
-      },
-      input: {
-        fontSize: '16px',
-      },
-    };
-    const cardNumber = elements.create('CARD_NUMBER', styles);
-    const cardDate = elements.create('CARD_DATE', styles);
-    const cardCvv = elements.create('CARD_CVV', styles);
-    const cardPostalCode = elements.create('CARD_POSTAL_CODE', styles);
-    cardNumber.mount('#card-number');
-    cardDate.mount('#card-date');
-    cardCvv.mount('#card-cvv');
-    cardPostalCode.mount('#card-postal-code');
-    const displayError = document.getElementById('card-errors');
-    // Handle real-time validation errors from the card Element.
-    cardNumber.addEventListener('change', (event) => {
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
+  onChange(e, val) {
+    this.setState({ [e.target.id]: e.target.value });
+  }
 
-    cardDate.addEventListener('change', (event) => {
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
+  onSubmit() {
+    const clover = window.Clover(this.state.apiAccessKey);
 
-    cardCvv.addEventListener('change', (event) => {
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
+    // Generate payment token
+    clover.createToken()
+      .then((result) => {
+        if (result.errors) {
+          Object.values(result.errors).forEach((value) => {
+            console.log('Error generating token: ', value);
+          });
+        } else {
+          console.log('Token: ', result.token);
+        }
+      });
 
-    cardPostalCode.addEventListener('change', (event) => {
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
-
-    const form = document.getElementById('payment-form');
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      clover.createToken()
-        .then((result: any) => {
-          if (result.errors) {
-            Object.values(result.errors).forEach((value) => {
-              console.log('Error generating token: ', value);
-            });
-          } else {
-            fetch('http://localhost:3030/payForAnOrder', {
-              method: 'POST',
-              headers: {'Content-Type':'application/json'},
-              body: JSON.stringify(result),
-            });
-          }
-        });
-    });
+    // Save for when I'm able to retrieve the token.
+    /*fetch('http://localhost:3030/payForAnOrder', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(this.state)
+    });*/
   }
 
   render() {
+
     return (
       <div className="App">
         <header className="App-header">
@@ -108,19 +61,36 @@ class Payment extends Component {
           </p>
         </header>
         <div className="App-list">
-          <form action="/charges" method="post" id="payment-form" className="Form">
-            <div className="form-row top-row">
-              <div id="card-number" className="field card-number"></div>
+
+          <form id='clover-payment'>
+            <div className="md-form">
+              <input type="text" id="amount" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <label for="amount">Amount</label>
             </div>
-            <div className="form-row">
-              <div id="card-date" className="field third-width"></div>
-              <div id="card-cvv" className="field third-width"></div>
-              <div id="card-postal-code" className="field third-width"></div>
+
+            <div className="md-form">
+              <input type="text" id="card-number" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <label for="card-number">Card Number</label>
             </div>
-            <div id="card-errors" role="alert" className="Errors"></div>
-            <div className="button-container">
-              <Link to='/OrderConfirmation'>
-                <button name="submit" className="btn btn-dark">PLACE ORDER</button>
+
+            <div>
+              <div className="md-form">
+                <input type="text" id="card-date" className="form-control" onChange={(e) => this.onChange(e)}/>
+                <label for="card-date">Exp Date</label>
+              </div>
+              <div className="md-form">
+                <input type="text" id="card-cvv" className="form-control" onChange={(e) => this.onChange(e)}/>
+                <label for="card-cvv">CVV</label>
+              </div>
+              <div className="md-form">
+                <input type="text" id="card-postal-code" className="form-control" onChange={(e) => this.onChange(e)}/>
+                <label for="card-postal-code">Zip Code</label>
+              </div>
+            </div>
+            <div id="card-errors" role="alert"></div>
+            <div>
+              <Link to='/orderConfirmation'>
+                <button type="button" class="btn btn-dark" onClick={ () => this.onSubmit() }>PLACE ORDER</button>
               </Link>
             </div>
           </form>
