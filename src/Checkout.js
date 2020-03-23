@@ -6,14 +6,14 @@ class Checkout extends Component {
   constructor() { 
     super();
     this.state = {
-      name: 'Reggie Soper',
-      email: 'reggie2surf',
-      city: 'Sunnyvale',
-      country: 'US',
-      line1: '245 Arriba Drive', // Street Address
-      line2: 'Apt 9', // Apt/Suite/Other
-      postal_code: '94085', // Zip Code
-      state: 'CA',
+      name: '',
+      email: '',
+      city: '',
+      country: '',
+      line1: '', // Street Address
+      line2: '', // Apt/Suite/Other
+      postal_code: '', // Zip Code
+      state: '',
     }
   }
 
@@ -42,36 +42,36 @@ class Checkout extends Component {
           <div className="Shipping-list">
 
             <div className="md-form">
-              <input type="text" id="name" value="Reggie Soper" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="name" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="name">Name</label>
             </div>
             <div className="md-form">
-              <input type="text" id="email" value="reggie2surf@gmail.com" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="email" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="email">Email</label>
             </div>
 
             <div className="md-form">
-              <input type="text" id="country" value="US" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="country" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="country">Country</label>
             </div>
             <div className="md-form">
-              <input type="text" id="line1" value="245 Arriba Drive" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="line1" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="line1">Street Address</label>
             </div>
             <div className="md-form">
-              <input type="text" id="line2" value="9" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="line2" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="line2">Apt/Suite/Other</label>
             </div>
             <div className="md-form">
-              <input type="text" id="postal_code" value="94085" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="postal_code" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="postal_code">Zip Code</label>
             </div>
             <div className="md-form">
-              <input type="text" id="city" value="Sunnyvale" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="city" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="city">City</label>
             </div>
             <div className="md-form">
-              <input type="text" id="state" value="California" className="form-control" onChange={(e) => this.onChange(e)}/>
+              <input type="text" id="state" className="form-control" onChange={(e) => this.onChange(e)}/>
               <label for="state">State</label>
             </div>
           </div>
